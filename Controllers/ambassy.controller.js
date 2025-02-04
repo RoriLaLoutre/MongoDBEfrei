@@ -1,14 +1,24 @@
-const mongoose = require("mongoose");
-const Ambassy = require("./Models/ambassy.model.js");
+import mongoose from "mongoose";
+import Ambassy from "./Models/ambassy.model.js";
 
-async function addAmbassy(nom, email) {
+export async function addAmbassy(nom, email) {
   try {
     const newAmbassy = new Ambassy({ nom, email });
     await newAmbassy.save();
-    console.log(`✅ Utilisateur ajouté : ${nom} (${email})`);
+    console.log(`✅ Ambassade ajoutée : ${nom} (${email})`);
   } catch (error) {
     console.error("❌ Erreur :", error.message);
   } finally {
     mongoose.connection.close();
   }
 }
+
+
+export async function getAllDiplomat() {
+  try {
+    return await Ambassy.find(req, res);
+    res.status(200).json(allDiplomat);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
