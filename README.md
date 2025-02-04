@@ -1,5 +1,7 @@
 # MongoDBEfrei
-https://www.data.gouv.fr/fr/datasets/lieux-de-vaccination-contre-la-covid-19/
+https://www.data.gouv.fr/fr/datasets/coordonnees-des-representations-diplomatiques/
+
+le json téléchargé a été modifié pour ne garder que les informations interéssentes le nouveau json sera dans un dossier data sur le github
 
 
 #Installation de Mongo DB
