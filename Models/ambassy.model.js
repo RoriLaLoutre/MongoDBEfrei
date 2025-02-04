@@ -1,29 +1,26 @@
 import mongoose from "mongoose";
 
-const RepresentationSchema = new mongoose.Schema({
-  nom: { type: String, required: true },
-  type: { type: String, required: true },
-  adresse: { type: String, required: true },
-  ville: { type: String, required: true },
-  code_postal: { type: String },
-  pays: { type: String, required: true },
-  telephone: { type: String },
-  fax: { type: String },
-  courriel: { type: String },
-  url: { type: String },
-  latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true },
-  socials: {
-    type: Map,
-    of: new mongoose.Schema({
-      type: { type: String },
-      url: { type: String },
-      url_complet: { type: String }
-    })
-  },
-  iso2: { type: String },
-  date_ajout: { type: Date, default: Date.now }
+const AmbassySchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId, // Identifiant MongoDB
+  id: { type: Number, required: true }, // ID numérique unique
+  pays: { type: String, required: true }, // Nom du pays
+  type: { type: String, required: true }, // Type de représentation (ex: ambassade)
+  nom: { type: String, required: true }, // Nom complet
+  adresse: { type: String, required: true }, // Adresse
+  ville: { type: String, required: true }, // Ville
+  code_postal: { type: String, default: null }, // Code postal (nullable)
+  telephone: { type: String, default: null }, // Téléphone
+  fax: { type: String, default: null }, // Fax
+  courriel: { type: String, default: null }, // Email
+  url: { type: String, default: null }, // Lien officiel
+  latitude: { type: Number, required: true }, // Coordonnée latitude
+  longitude: { type: Number, required: true }, // Coordonnée longitude
+  social: { type: String, default: null }, // Lien du réseau social
+  iso2: { type: String, required: true }, // Code ISO du pays
+  date_ajout: { type: Date, required: true }, // Date d'ajout
 });
 
-const Representation = mongoose.model("Representation", RepresentationSchema);
-export default Representation;
+
+const Ambassy = mongoose.model("Ambassy", AmbassySchema);
+export default Ambassy;
+
