@@ -16,7 +16,7 @@ export async function addAmbassy(nom, email) {
 
 export async function getAllDiplomat() {
   try {
-    return await Ambassy.find(req, res);
+    const allDiplomat = await Ambassy.find(req, res);
     res.status(200).json(allDiplomat);
   } catch (error) {
     res.status(500).json({ message: error.message });
