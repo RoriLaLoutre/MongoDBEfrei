@@ -1,10 +1,9 @@
 import express from "express";
+import {AmbassyController} from "../Controllers/index.controller.js";
 
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-    res.send("Hello from vaccin router");
-});
+router.get("/", AmbassyController.getAllDiplomat);
 
 export default router;

@@ -28,6 +28,6 @@ const AmbassySchema = new mongoose.Schema({
 });
 
 
-const Ambassy = mongoose.model("Ambassy", AmbassySchema);
+const Ambassy = mongoose.model("Ambassy", AmbassySchema, "ambassade");
 export default Ambassy;
 
