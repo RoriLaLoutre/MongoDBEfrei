@@ -1,0 +1,1 @@
+export * as AmbassyController from './ambassy.controller.js';
