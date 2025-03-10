@@ -15,7 +15,14 @@ const AmbassySchema = new mongoose.Schema({
   url: { type: String, default: null }, // Lien officiel
   latitude: { type: Number, required: true }, // Coordonnée latitude
   longitude: { type: Number, required: true }, // Coordonnée longitude
-  social: { type: String, default: null }, // Lien du réseau social
+  socials: {
+    type: Map, // Un objet clé-valeur dynamique
+    of: new mongoose.Schema({
+      type: { type: String, required: true }, // Type de réseau social (ex: "facebook")
+      url: { type: String, required: true }, // URL du réseau social
+      url_complet: { type: String, required: true } // Lien HTML complet
+    }, { _id: false }) // Empêche d'ajouter un _id pour chaque sous-document
+  },
   iso2: { type: String, required: true }, // Code ISO du pays
   date_ajout: { type: Date, required: true }, // Date d'ajout
 });
