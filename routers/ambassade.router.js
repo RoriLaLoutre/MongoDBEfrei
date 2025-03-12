@@ -18,7 +18,7 @@ router.get("/add", (req, res) => {
     res.sendFile(path.join(__dirname, '../views', 'add_form.html'));
 });
 router.post("/add", AmbassyController.addAmbassy);
-router.get("/:id", AmbassyController.getid); // Cette route doit être placée après
+router.get("/get/:id", AmbassyController.getid); // Cette route doit être placée après
 router.get("/search/iso/:iso2", AmbassyController.getBYiso);
 router.get("/search/city/:city", AmbassyController.getBYcity);
 

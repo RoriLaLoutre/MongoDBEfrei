@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const AmbassySchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId, // Identifiant MongoDB
-  id: { type: Number, required: true }, // ID numérique unique
+  id: { type: Number, required: true }, // Identifiant unique
   pays: { type: String, required: true }, // Nom du pays
   type: { type: String, required: true }, // Type de représentation (ex: ambassade)
   nom: { type: String, required: true }, // Nom complet
@@ -22,6 +22,7 @@ const AmbassySchema = new mongoose.Schema({
       url: { type: String, required: true }, // URL du réseau social
       url_complet: { type: String, required: true } // Lien HTML complet
     }, { _id: false }) // Empêche d'ajouter un _id pour chaque sous-document
+  ,default: {} // Valeur par défaut
   },
   iso2: { type: String, required: true }, // Code ISO du pays
   date_ajout: { type: Date, required: true }, // Date d'ajout

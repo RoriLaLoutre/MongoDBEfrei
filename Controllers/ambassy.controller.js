@@ -20,56 +20,77 @@ export async function get20Diplomat(req, res, next) {
   }
 };
 
-export async function addAmbassy(req, res, next) {
-  console.log("c ok");
+export async function addAmbassy(req, res) {
+  console.log(req.body); // Affiche les données envoyées pour le débogage
+
   try {
-    const {
-        pays,
-        type,
-        nom,
-        adresse,
-        ville,
-        code_postal,
-        telephone,
-        fax,
-        courriel,
-        url,
-        latitude,
-        longitude,
-        iso2,
-        socials
-    } = req.body;
+      // Destructuration des données envoyées dans le corps de la requête
+      const {
+          id,
+          pays,
+          type,
+          nom,
+          adresse,
+          ville,
+          code_postal,
+          telephone,
+          fax,
+          courriel,
+          url,
+          latitude,
+          longitude,
+          iso2,
+          socials
+      } = req.body;
 
-    if (!pays || !type || !nom || !adresse || !ville || !latitude || !longitude || !iso2) {
-        return res.status(400).json({ message: "Les champs obligatoires doivent être remplis." });
-    }
+      // Validation des champs obligatoires
+      if (!pays || !type || !nom || !adresse || !ville || !latitude || !longitude || !iso2) {
+          return res.status(400).json({ message: "Les champs obligatoires doivent être remplis." });
+      }
 
-    const newAmbassy = new Ambassy({
-        _id: new mongoose.Types.ObjectId(),
-        pays,
-        type,
-        nom,
-        adresse,
-        ville,
-        code_postal: code_postal || null,
-        telephone: telephone || null,
-        fax: fax || null,
-        courriel: courriel || null,
-        url: url || null,
-        latitude,
-        longitude,
-        socials: socials || {},
-        iso2,
-    });
-    console.log("moment de verité")
-    await newAmbassy.save();
-    console.log("100% c la que ca foire")
-    res.status(201).json({ message: "Ambassade ajoutée avec succès"});
-} catch (error) {
-    res.status(500).json({ message: "Erreur lors de l'envoie des donnée"});
+      // Validation de la structure des réseaux sociaux
+      if (socials && Array.isArray(socials)) {
+          socials.forEach(social => {
+              if (!social.type || !social.url) {
+                  return res.status(400).json({ message: "Chaque réseau social doit avoir un type et une URL." });
+              }
+          });
+      }
+
+      // Création d'une nouvelle ambassade
+      const newAmbassy = new Ambassy({
+          _id: new mongoose.Types.ObjectId(),
+          id: id || Date.now(),
+          pays,
+          type,
+          nom,
+          adresse,
+          ville,
+          code_postal: code_postal || null,
+          telephone: telephone || null,
+          fax: fax || null,
+          courriel: courriel || null,
+          url: url || null,
+          latitude,
+          longitude,
+          socials: socials || [], // Utiliser un tableau vide si pas de données
+          iso2,
+          date_ajout: new Date() // Ajouter la date de création
+      });
+
+      console.log(newAmbassy); // Pour vérifier l'objet créé
+
+      // Enregistrer l'ambassade dans la base de données
+      await newAmbassy.save();
+
+      // Répondre avec succès
+      res.status(201).json({ message: "Ambassade ajoutée avec succès" });
+
+  } catch (error) {
+      console.error(error); // Afficher l'erreur pour débogage
+      res.status(500).json({ message: "Erreur lors de l'envoi des données" });
+  }
 }
-}
-
 
 export async function getid(req, res, next) {
   const id = req.params.id;

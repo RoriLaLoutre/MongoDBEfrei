@@ -35,10 +35,10 @@
         <input type="text" name="fax"><br><br>
 
         <label>Courriel :</label>
-        <input type="email" name="courriel"><br><br>
+        <input type="text" name="courriel"><br><br>
 
         <label>URL :</label>
-        <input type="url" name="url"><br><br>
+        <input type="text" name="url"><br><br>
 
         <label>Latitude :</label>
         <input type="number" name="latitude" step="any" required><br><br>
@@ -49,6 +49,13 @@
         <label>Code ISO :</label>
         <input type="text" name="iso2" required><br><br>
 
+        <label>Socials :</label>
+        <div id="socialsContainer">
+            <input type="text" name="socialType" placeholder="Type de réseau social" required>
+            <input type="text" name="socialUrl" placeholder="URL du réseau social" required>
+        </div>
+        <button type="button" id="addSocial">Ajouter un réseau social</button><br><br>
+
         <button type="submit">Ajouter</button>
     </form>
 
@@ -58,7 +65,29 @@
 
             const formData = new FormData(this);
             const jsonData = {};
-            formData.forEach((value, key) => jsonData[key] = value);
+            const socials = [];
+
+            // Collecte les champs sociaux
+            const socialTypes = document.getElementsByName("socialType");
+            const socialUrls = document.getElementsByName("socialUrl");
+            for (let i = 0; i < socialTypes.length; i++) {
+                const social = {
+                    type: socialTypes[i].value,
+                    url: socialUrls[i].value,
+                    url_complet: socialUrls[i].value // ou un autre calcul si nécessaire
+                };
+                socials.push(social);
+            }
+
+            formData.forEach((value, key) => {
+                if (key === "latitude" || key === "longitude") {
+                    jsonData[key] = parseFloat(value);
+                } else if (key === "socials") {
+                    jsonData[key] = socials; // Ajouter les réseaux sociaux
+                } else {
+                    jsonData[key] = value;
+                }
+            });
 
             console.log("🔍 Données envoyées :", jsonData);
 
@@ -77,6 +106,22 @@
             } else {
                 alert("Erreur : " + result.message);
             }
+        });
+
+        // Ajouter un réseau social dynamique
+        document.getElementById("addSocial").addEventListener("click", function() {
+            const container = document.getElementById("socialsContainer");
+            const newInputType = document.createElement("input");
+            newInputType.type = "text";
+            newInputType.name = "socialType";
+            newInputType.placeholder = "Type de réseau social";
+            container.appendChild(newInputType);
+
+            const newInputUrl = document.createElement("input");
+            newInputUrl.type = "text";
+            newInputUrl.name = "socialUrl";
+            newInputUrl.placeholder = "URL du réseau social";
+            container.appendChild(newInputUrl);
         });
     </script>
 </body>
