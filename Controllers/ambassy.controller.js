@@ -101,7 +101,40 @@ export async function getBYcity(req, res, next) {
 };
 
 export async function searchAmbassy(req, res) {
-  res.status(200).json({ message: "Route de recherche fonctionnelle" });
-}
+  try {
+      console.log("🔍 Requête reçue :", req.query); // Debugging
 
+      const { texte, code_postal } = req.query;
+
+      if (!texte) {
+          return res.status(400).json({ message: "Veuillez fournir un terme de recherche." });
+      }
+
+      console.log("📝 Recherche dans MongoDB pour :", texte);
+
+      let filter = { nom: { $regex: texte, $options: "i" } }; // Recherche insensible à la casse
+
+      // Ajout du filtre sur le code postal
+      if (code_postal === "null") {
+          filter.code_postal = null;  // Cherche les ambassades SANS code postal
+      } else if (code_postal === "non_null") {
+          filter.code_postal = { $ne: null };  // Cherche celles qui ONT un code postal
+      }
+
+      console.log("🔍 Filtre MongoDB :", filter);
+
+      const results = await Ambassy.find(filter);
+
+      if (results.length === 0) {
+          console.log("❌ Aucune ambassade trouvée avec ces critères.");
+          return res.status(404).json({ message: `Aucune ambassade trouvée.` });
+      }
+
+      console.log("✅ Ambassade(s) trouvée(s) :", results);
+      res.status(200).json(results);
+  } catch (error) {
+      console.error("❌ Erreur lors de la recherche :", error);
+      res.status(500).json({ message: "Erreur serveur", error: error.message });
+  }
+}
 
