@@ -9,6 +9,11 @@ const __dirname = path.dirname(__filename);
 const router = express.Router();
 
 router.get("/", AmbassyController.getAllDiplomat);
+
+router.get('/all_interface', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'all_interface.html'));
+});
+
 router.get("/all20", AmbassyController.get20Diplomat);
 //router.post("/add", AmbassyController.addAmbassy);
 //router.put("/update/:id", AmbassyController.updateAmbassy);
