@@ -178,7 +178,9 @@ Contenu du fichier : routers\ambassade.router.js
 import express from "express";
 import {AmbassyController} from "../Controllers/index.controller.js";
 import path from 'path';
-
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const router = express.Router();
@@ -189,7 +191,7 @@ router.get("/all20", AmbassyController.get20Diplomat);
 //router.put("/update/:id", AmbassyController.updateAmbassy);
 //router.delete("/delete/:id", AmbassyController.deleteAmbassy);
 // Route pour afficher le formulaire
-router.get('/add', (req, res) => {
+router.post('/add', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'add_form.html'),
     AmbassyController.addAmbassy);
     });
@@ -229,3 +231,70 @@ app.use("/api/ambassade" , router);
 
 
 app.listen(3000, () => console.log("Server listen on http://localhost:3000/api/ambassade/"));0
+======================================================================================
+
+Contenu du fichier : views\add_form.html
+
+======================================================================================
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une Ambassade</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <h2>Ajouter une Ambassade</h2>
+    <form id="ambassyForm">
+        <label>Pays :</label>
+        <input type="text" name="pays" required><br><br>
+
+        <label>Type :</label>
+        <input type="text" name="type" required><br><br>
+
+        <label>Nom :</label>
+        <input type="text" name="nom" required><br><br>
+
+        <label>Adresse :</label>
+        <input type="text" name="adresse" required><br><br>
+
+        <label>Ville :</label>
+        <input type="text" name="ville" required><br><br>
+
+        <label>Code Postal :</label>
+        <input type="text" name="code_postal"><br><br>
+
+        <label>Téléphone :</label>
+        <input type="text" name="telephone"><br><br>
+
+        <label>Fax :</label>
+        <input type="text" name="fax"><br><br>
+
+        <label>Courriel :</label>
+        <input type="email" name="courriel"><br><br>
+
+        <label>URL :</label>
+        <input type="url" name="url"><br><br>
+
+        <label>Latitude :</label>
+        <input type="number" name="latitude" step="any" required><br><br>
+
+        <label>Longitude :</label>
+        <input type="number" name="longitude" step="any" required><br><br>
+
+        <label>Code ISO :</label>
+        <input type="text" name="iso2" required><br><br>
+
+        <button type="submit">Ajouter</button>
+    </form>0
+======================================================================================
+
+Contenu du fichier : views\style\style.css
+
+======================================================================================
+form{
+    width: 70%;
+    margin-left: 15%;
+}0
