@@ -123,7 +123,7 @@ export async function getBYcity(req, res, next) {
 
 export async function searchAmbassy(req, res) {
   try {
-      console.log("🔍 Requête reçue :", req.query); // Debugging
+      console.log("Requête reçue :", req.query);
 
       const { texte, code_postal } = req.query;
 
@@ -131,30 +131,30 @@ export async function searchAmbassy(req, res) {
           return res.status(400).json({ message: "Veuillez fournir un terme de recherche." });
       }
 
-      console.log("📝 Recherche dans MongoDB pour :", texte);
+      console.log("Recherche dans MongoDB pour :", texte);
 
-      let filter = { nom: { $regex: texte, $options: "i" } }; // Recherche insensible à la casse
+      let filter = { nom: { $regex: texte, $options: "i" } };
 
       // Ajout du filtre sur le code postal
       if (code_postal === "null") {
-          filter.code_postal = null;  // Cherche les ambassades SANS code postal
+          filter.code_postal = null;
       } else if (code_postal === "non_null") {
-          filter.code_postal = { $ne: null };  // Cherche celles qui ONT un code postal
+          filter.code_postal = { $ne: null };
       }
 
-      console.log("🔍 Filtre MongoDB :", filter);
+      console.log("Filtre MongoDB :", filter);
 
       const results = await Ambassy.find(filter);
 
       if (results.length === 0) {
-          console.log("❌ Aucune ambassade trouvée avec ces critères.");
+          console.log("Aucune ambassade trouvée avec ces critères.");
           return res.status(404).json({ message: `Aucune ambassade trouvée.` });
       }
 
-      console.log("✅ Ambassade(s) trouvée(s) :", results);
+      console.log("Ambassade(s) trouvée(s) :", results);
       res.status(200).json(results);
   } catch (error) {
-      console.error("❌ Erreur lors de la recherche :", error);
+      console.error("Erreur lors de la recherche :", error);
       res.status(500).json({ message: "Erreur serveur", error: error.message });
   }
 }
