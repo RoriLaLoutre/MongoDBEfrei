@@ -18,13 +18,15 @@ router.get('/add', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'add_form.html'),
     AmbassyController.addAmbassy);
     });
-router.get("/search", (req, res) => {
+router.get("/searchform", (req, res) => {
     res.sendFile(path.join(__dirname,"..", 'views', 'searchform.html'));
 });
 router.get("/:id", AmbassyController.getid);
 
 router.get("/search/iso/:iso2", AmbassyController.getBYiso);
 router.get("/search/city/:city", AmbassyController.getBYcity);
+router.get("/searchform/results", AmbassyController.searchAmbassy);
+
 
 
 

@@ -99,3 +99,9 @@ export async function getBYcity(req, res, next) {
     res.status(500).json({ message: error.message });
   }
 };
+
+export async function searchAmbassy(req, res) {
+  res.status(200).json({ message: "Route de recherche fonctionnelle" });
+}
+
+
