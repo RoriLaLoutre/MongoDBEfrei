@@ -4,12 +4,31 @@ import Ambassy from "../Models/ambassy.model.js";
 
 export async function getAllDiplomat(req, res, next) {
   try {
-    const allDiplomat = await Ambassy.find();
+    // Paramètres pour la projection
+    const fields = req.query.fields ? req.query.fields.split(",") : [];
+
+    // Paramètres pour la pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    // Paramètre pour le tri
+    const sortBy = req.query.sortBy || "pays"; // Par défaut, trier par "pays"
+    const sortOrder = req.query.sortOrder === "desc" ? -1 : 1; // 1 pour croissant, -1 pour décroissant
+
+    const allDiplomat = await Ambassy.find()
+      .select(fields.length ? fields.join(" ") : "")
+      .skip(skip)
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder });
+
     res.status(200).json(allDiplomat);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+}
+
+
 
 export async function get20Diplomat(req, res, next) {
   try {
@@ -21,6 +40,7 @@ export async function get20Diplomat(req, res, next) {
 };
 
 export async function addAmbassy(req, res, next) {
+  console.log("c ok");
   try {
     const {
         pays,
@@ -60,11 +80,12 @@ export async function addAmbassy(req, res, next) {
         socials: socials || {},
         iso2,
     });
-
+    console.log("moment de verité")
     await newAmbassy.save();
+    console.log("100% c la que ca foire")
     res.status(201).json({ message: "Ambassade ajoutée avec succès"});
 } catch (error) {
-    res.status(500).json({ message: "Erreur serveur"});
+    res.status(500).json({ message: "Erreur lors de l'envoie des donnée"});
 }
 }
 
