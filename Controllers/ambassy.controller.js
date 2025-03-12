@@ -4,12 +4,25 @@ import Ambassy from "../Models/ambassy.model.js";
 
 export async function getAllDiplomat(req, res, next) {
   try {
-    const allDiplomat = await Ambassy.find();
+    // Paramètres pour la projection
+    const fields = req.query.fields ? req.query.fields.split(",") : [];
+
+    // Paramètres pour la pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+    const allDiplomat = await Ambassy.find()
+      .select(fields.length ? fields.join(" ") : "")
+      .skip(skip)
+      .limit(limit);
+
     res.status(200).json(allDiplomat);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+}
+
 
 export async function get20Diplomat(req, res, next) {
   try {
