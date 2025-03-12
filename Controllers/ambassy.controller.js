@@ -21,25 +21,52 @@ export async function get20Diplomat(req, res, next) {
 };
 
 export async function addAmbassy(req, res, next) {
-  const ambassy = new Ambassy({    // a faire plus tard
-    pays: req.body.pays,
-    type: req.body.type,
-    nom: req.body.nom,
-    adresse: req.body.adresse,
-    ville: req.body.ville,
-    code_postal: req.body.code_postal,
-    telephone: req.body.telephone,
-    fax: req.body.fax,
-    courriel: req.body.courriel,
-    url: req.body.url,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-    socials: req.body.socials,
-    iso2: req.body.iso2,
-    date_ajout: req.body.date_ajout,
-  });
-    
-};
+  try {
+    const {
+        pays,
+        type,
+        nom,
+        adresse,
+        ville,
+        code_postal,
+        telephone,
+        fax,
+        courriel,
+        url,
+        latitude,
+        longitude,
+        iso2,
+        socials
+    } = req.body;
+
+    if (!pays || !type || !nom || !adresse || !ville || !latitude || !longitude || !iso2) {
+        return res.status(400).json({ message: "Les champs obligatoires doivent être remplis." });
+    }
+
+    const newAmbassy = new Ambassy({
+        _id: new mongoose.Types.ObjectId(),
+        pays,
+        type,
+        nom,
+        adresse,
+        ville,
+        code_postal: code_postal || null,
+        telephone: telephone || null,
+        fax: fax || null,
+        courriel: courriel || null,
+        url: url || null,
+        latitude,
+        longitude,
+        socials: socials || {},
+        iso2,
+    });
+
+    await newAmbassy.save();
+    res.status(201).json({ message: "Ambassade ajoutée avec succès"});
+} catch (error) {
+    res.status(500).json({ message: "Erreur serveur"});
+}
+}
 
 
 export async function getid(req, res, next) {
