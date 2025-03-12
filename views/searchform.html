@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="/style/style.css">
+  <title>Formulaire de recherche</title>
+</head>
+<body>
+  <h1>Formulaire de Recherche d'Ambassade</h1>
+  <form action="/recherche-result" method="GET">
+    <label for="texte">Recherche par texte (nom) :</label>
+    <input type="text" id="texte" name="texte" placeholder="Entrez un mot clé">
+    <br><br>
+
+    <!-- Filtrer les résultats sur les valeurs non nulles -->
+    <label for="code_postal">Filtrer sur Code Postal :</label>
+    <select id="code_postal" name="code_postal">
+      <option value="">Tous</option>
+      <option value="non_null">Non nul</option>
+      <option value="null">Nul</option>
+    </select>
+    <br><br>
+
+    <!-- Filtrer par sous-champ d'un champ de type objet (socials) -->
+    <label for="socials">Filtrer par type de réseau social :</label>
+    <select id="socials" name="socials">
+      <option value="">Tous</option>
+      <option value="facebook">Facebook</option>
+      <option value="twitter">Twitter</option>
+      <option value="linkedin_company">LinkedIn</option>
+      <option value="instagram">Instagram</option>
+      <option value="youtube">Youtube</option>
+    </select>
+    <br><br>
+
+    <!-- Filtrer les résultats par valeurs dans un tableau (socials) -->
+    <label for="socials_url">Filtrer sur l'URL d'un réseau social :</label>
+    <input type="text" id="socials_url" name="socials_url" placeholder="URL du réseau social">
+    <br><br>
+
+    <!-- Soumettre le formulaire -->
+    <button type="submit">Rechercher</button>
+  </form>
+</body>
+</html>

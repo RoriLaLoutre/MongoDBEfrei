@@ -18,6 +18,9 @@ router.get('/add', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'add_form.html'),
     AmbassyController.addAmbassy);
     });
+router.get("/search", (req, res) => {
+    res.sendFile(path.join(__dirname,"..", 'views', 'searchform.html'));
+});
 router.get("/:id", AmbassyController.getid);
 
 router.get("/search/iso/:iso2", AmbassyController.getBYiso);
