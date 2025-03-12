@@ -11,7 +11,9 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/style', express.static(path.join(__dirname, 'views', 'style')));
 app.use(express.static(path.join(__dirname, 'views')));
+
 connectDB();
 
 app.use("/api/ambassade" , router);

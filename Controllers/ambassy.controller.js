@@ -40,6 +40,7 @@ export async function get20Diplomat(req, res, next) {
 };
 
 export async function addAmbassy(req, res, next) {
+  console.log("c ok");
   try {
     const {
         pays,
@@ -79,11 +80,12 @@ export async function addAmbassy(req, res, next) {
         socials: socials || {},
         iso2,
     });
-
+    console.log("moment de verité")
     await newAmbassy.save();
+    console.log("100% c la que ca foire")
     res.status(201).json({ message: "Ambassade ajoutée avec succès"});
 } catch (error) {
-    res.status(500).json({ message: "Erreur serveur"});
+    res.status(500).json({ message: "Erreur lors de l'envoie des donnée"});
 }
 }
 

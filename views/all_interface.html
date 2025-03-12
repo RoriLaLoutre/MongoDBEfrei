@@ -3,105 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page de Sélection des Champs et Limite</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      padding: 20px;
-      margin: 0;
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .checkbox-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 20px;
-    }
-
-    .checkbox-group label {
-      margin-bottom: 8px;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .input-group {
-      margin-bottom: 20px;
-    }
-
-    .input-group label {
-      font-size: 16px;
-      color: #555;
-    }
-
-    .input-group input {
-      padding: 8px;
-      font-size: 14px;
-      width: 100%;
-      box-sizing: border-box;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .submit-button {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #007BFF;
-      color: white;
-      font-size: 16px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .submit-button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <title>Liste des Ambassades</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
 
-  <h1>Choisissez les Champs et la Limite</h1>
-
-  <div class="container">
-    <form id="filterForm">
-      
-      <!-- Section de sélection des champs -->
-      <div class="checkbox-group">
-        <label>Choisissez les champs à afficher :</label>
-        <label><input type="checkbox" name="fields" value="pays"> Pays</label>
-        <label><input type="checkbox" name="fields" value="nom"> Nom</label>
-        <label><input type="checkbox" name="fields" value="ville"> Ville</label>
-        <label><input type="checkbox" name="fields" value="population"> Population</label>
-      </div>
-
-      <!-- Section de saisie de la limite -->
-      <div class="input-group">
-        <label for="limit">Limite des résultats :</label>
-        <input type="number" id="limit" name="limit" min="1" value="10">
-      </div>
-
-      <!-- Bouton de soumission -->
-      <button type="submit" class="submit-button">Appliquer les filtres</button>
-    </form>
-  </div>
-
+  <h2>Liste des Ambassades</h2>
   
+  <!-- Formulaire de tri et de sélection des champs -->
+  <form id="sortForm">
+    
+    <!-- Sélection des champs à récupérer -->
+    <fieldset>
+      <legend>Choisir les champs à afficher :</legend>
+      <label>
+        <input type="checkbox" name="fields" value="nom" checked>
+        Nom
+      </label>
+      <label>
+        <input type="checkbox" name="fields" value="pays" checked>
+        Pays
+      </label>
+      <label>
+        <input type="checkbox" name="fields" value="ville" checked>
+        Ville
+      </label>
+      <!-- Ajouter d'autres champs si nécessaire -->
+    </fieldset>
+
+    <!-- Trier par -->
+    <label for="sortBy">Trier par :</label>
+    <select name="sortBy" id="sortBy">
+      <option value="pays">Pays</option>
+      <option value="ville">Ville</option>
+      <option value="nom">Nom</option>
+    </select>
+    
+    <!-- Ordre de tri -->
+    <label for="sortOrder">Ordre :</label>
+    <select name="sortOrder" id="sortOrder">
+      <option value="asc">Croissant</option>
+      <option value="desc">Décroissant</option>
+    </select>
+
+    <!-- Nombre de résultats par page -->
+    <label for="resultsPerPage">Résultats par page :</label>
+    <select name="resultsPerPage" id="resultsPerPage">
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+
+    <!-- Pagination -->
+    <label for="page">Page :</label>
+    <select name="page" id="page">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <!-- Ajouter des options pour plus de pages -->
+    </select>
+
+    <button type="submit">Appliquer les filtres</button>
+  </form>
+  
+  <ul id="ambassyList"></ul>
+
+  <script>
+    document.getElementById("sortForm").addEventListener("submit", async function(event) {
+      event.preventDefault(); // Empêche le rechargement de la page
+
+      const sortBy = document.getElementById("sortBy").value;
+      const sortOrder = document.getElementById("sortOrder").value;
+      const resultsPerPage = document.getElementById("resultsPerPage").value;
+      const page = document.getElementById("page").value;
+
+      // Récupérer les champs sélectionnés
+      const selectedFields = Array.from(document.querySelectorAll('input[name="fields"]:checked')).map(checkbox => checkbox.value);
+
+      // Appeler l'API avec les paramètres
+      const response = await fetch(`/api/ambassade?sortBy=${sortBy}&sortOrder=${sortOrder}&resultsPerPage=${resultsPerPage}&page=${page}&fields=${selectedFields.join(',')}`);
+      const data = await response.json();
+
+      // Afficher les ambassades
+      const ambassyList = document.getElementById("ambassyList");
+      ambassyList.innerHTML = ''; // Vider la liste actuelle
+
+      data.forEach(ambassy => {
+        const li = document.createElement("li");
+        // Afficher uniquement les champs sélectionnés
+        const displayText = selectedFields.map(field => `${field.charAt(0).toUpperCase() + field.slice(1)}: ${ambassy[field]}`).join(' - ');
+        li.textContent = displayText;
+        ambassyList.appendChild(li);
+      });
+    });
+  </script>
 
 </body>
 </html>
