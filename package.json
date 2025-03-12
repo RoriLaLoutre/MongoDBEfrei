@@ -14,13 +14,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type":"module",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/RoriLaLoutre/MongoDBEfrei/issues"
   },
   "homepage": "https://github.com/RoriLaLoutre/MongoDBEfrei#readme",
   "dependencies": {
     "express": "^4.21.2",
-    "mongoose": "^8.9.6"
+    "mongoose": "^8.9.6",
+    "nodemon": "^3.1.9"
   }
 }
