@@ -12,16 +12,22 @@ export async function getAllDiplomat(req, res, next) {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
+    // Paramètre pour le tri
+    const sortBy = req.query.sortBy || "pays"; // Par défaut, trier par "pays"
+    const sortOrder = req.query.sortOrder === "desc" ? -1 : 1; // 1 pour croissant, -1 pour décroissant
+
     const allDiplomat = await Ambassy.find()
       .select(fields.length ? fields.join(" ") : "")
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ [sortBy]: sortOrder });
 
     res.status(200).json(allDiplomat);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
+
 
 
 export async function get20Diplomat(req, res, next) {
